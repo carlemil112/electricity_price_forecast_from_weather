@@ -13,7 +13,7 @@ The model achieves a MAE of 210 DKK/MWh compared to a naive baseline of 328 DKK/
 
 ## Architecture
 ```
-Prefect (daily 06:00)
+                                Prefect (daily 06:00)
                                         │
 DMI Weather API ──┐                     ▼
                   ├──► ingest.py ──► features.py ──► train.py ──► MLflow
