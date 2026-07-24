@@ -13,7 +13,9 @@ The model achieves a MAE of 210 DKK/MWh compared to a naive baseline of 328 DKK/
 
 ## Architecture
 ```
-DMI Weather API ──┐
+Prefect (daily 06:00)
+                                        │
+DMI Weather API ──┐                     ▼
                   ├──► ingest.py ──► features.py ──► train.py ──► MLflow
 Energi Data  ─────┘                                      │
 Service API                                               ▼
@@ -25,6 +27,7 @@ Service API                                               ▼
 
 Pipeline steps:
 
+- Prefect — daily scheduled flow orchestrating ingest → features → retrain
 - Ingest — fetches live wind observations (DMI) and spot prices (Energi Data Service)
 - Features — builds hourly feature matrix including price lags (24h, 48h, 168h), rolling averages, wind speed, and calendar features (hour, day of week, weekend)
 - Train — LightGBM regressor trained on 90 days of data with time-series train/test split. Experiments tracked with MLflow
@@ -75,6 +78,7 @@ Open http://localhost:8501 in your browser.
 - **MLflow** — experiment tracking and model registry
 - **FastAPI** — REST API serving the forecast endpoint
 - **Streamlit** — interactive dashboard frontend
+- **Prefect** — pipeline orchestration and daily scheduling
 - **Pandas** — data manipulation and feature engineering
 - **Plotly** — interactive forecast chart
 - **Energi Data Service** — Danish day-ahead electricity price data
