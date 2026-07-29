@@ -8,3 +8,4 @@ requests
 plotly
 scikit-learn
 pyarrow
+skops
