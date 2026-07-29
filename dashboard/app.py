@@ -2,19 +2,19 @@ import streamlit as st
 import requests
 from datetime import datetime
 import plotly.express as px
+import pandas as pd
 
 
 
 st.title("Danish Electricity Price Forecast")
 
 #Call API
-response = requests.get("http://localhost:8000/forecast")
+response = requests.get("http://api:8000/forecast")
 
-#Parse
 #Parse
 data = response.json()
 
-import pandas as pd
+
 df = pd.DataFrame(data)
 
 fig = px.line(df, x="timestamp", y="forecast_dkk_mwh",

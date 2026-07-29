@@ -1,17 +1,21 @@
 from fastapi import FastAPI
 from ingest import fetch_prices, fetch_wind
 from features import build_features
-import mlflow
-
+import glob
+import os
+from skops.io import load as skops_load
 
 
 app = FastAPI()
 
-# runs once when server starts
-runs = mlflow.search_runs(search_all_experiments=True)
-best_run = runs.sort_values("metrics.mae").iloc[0]
-run_id = best_run["run_id"]
-model = mlflow.lightgbm.load_model(f"runs:/{run_id}/model")
+# Find and load the most recent model
+model_files = glob.glob("mlruns/**/model.skops", recursive=True)
+latest_model = max(model_files, key=os.path.getmtime)
+model = skops_load(latest_model, trusted=[
+    "lightgbm.sklearn.LGBMRegressor",
+    "lightgbm.basic.Booster",
+    "collections.OrderedDict"
+])
 
 @app.get("/forecast")
 def forecast():
@@ -25,8 +29,8 @@ def forecast():
     predictions = model.predict(next_24)
 
     results = [
-    {"timestamp": str(ts), "forecast_dkk_mwh": round(pred, 2)}
-    for ts, pred in zip(timestamps, predictions)
+        {"timestamp": str(ts), "forecast_dkk_mwh": round(pred, 2)}
+        for ts, pred in zip(timestamps, predictions)
     ]
 
     return results
