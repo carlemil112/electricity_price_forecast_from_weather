@@ -36,11 +36,36 @@ Pipeline steps:
 
 
 ## How to run
-How to run
+
+### With Docker 
+
 1. Clone the repo
 ```bash
-git clone https://github.com/carlemil112/dk-power-forecast.git
-cd dk-power-forecast
+git clone https://github.com/carlemil112/electricity_price_forecast_from_weather.git
+cd electricity_price_forecast_from_weather
+```
+
+2. Train the model (first time only)
+```bash
+docker-compose run api python ingest.py
+docker-compose run api python train.py
+```
+
+3. Start everything
+```bash
+docker-compose up
+```
+
+Open http://localhost:8501 in your browser.
+
+---
+
+### Without Docker
+
+1. Clone the repo
+```bash
+git clone https://github.com/carlemil112/electricity_price_forecast_from_weather.git
+cd electricity_price_forecast_from_weather
 ```
 
 2. Install dependencies
@@ -48,29 +73,23 @@ cd dk-power-forecast
 pip install -r requirements.txt
 ```
 
-3. Fetch data
+3. Fetch data and train
 ```bash
 python ingest.py
-```
-4. Build features
-```bash
 python features.py
-```
-
-5. Train the model
-```bash
 python train.py
 ```
 
-6. Start the API
+4. Start the API
 ```bash
 uvicorn serve.app:app --reload
 ```
 
-7. Start the dashboard (new terminal tab)
+5. Start the dashboard (new terminal tab)
 ```bash
 streamlit run dashboard/app.py
 ```
+
 Open http://localhost:8501 in your browser.
 
 ## Tech stack
