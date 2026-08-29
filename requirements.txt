@@ -9,3 +9,4 @@ plotly
 scikit-learn
 pyarrow
 skops
+prefect==3.8.1

@@ -1,0 +1,15 @@
+#Python Image
+FROM python:3.13
+
+# Working directory inside the container
+WORKDIR /app
+
+# Requirements for server
+COPY requirements-worker.txt .
+
+# Installataion of python dependencies
+RUN pip install --no-cache-dir -r requirements-worker.txt
+
+# Copy all the project files to this container
+COPY . .
+
