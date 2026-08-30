@@ -1,0 +1,18 @@
+name: electricity_price
+prefect-version: 3.8.1
+
+build: null
+push: null
+
+pull:
+- prefect.deployments.steps.set_working_directory:
+    directory: /app
+
+deployments:
+  - name: daily-retrain
+    entrypoint: flows/daily.py:daily_pipeline
+    work_pool:
+      name: process-pool
+    schedule:
+      cron: 00 6 * * *
+      timezone: Europe/Copenhagen
