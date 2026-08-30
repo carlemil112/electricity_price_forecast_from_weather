@@ -41,15 +41,7 @@ def evaluate_model(model, df_test):
     return mae, rmse
 
 
-
-if __name__ == "__main__":
-    df_prices = pd.read_parquet("data/df_prices.parquet")
-    df_wind = pd.read_parquet("data/df_wind.parquet")
-
-    df_features = build_features(df_prices, df_wind)
-    df_train, df_test = split_features(df_features)
-
-
+def run_training_pipeline(df_train, df_test):
     with mlflow.start_run():
         #logging of parameters:
         mlflow.log_param("max_depth", 4)
@@ -63,4 +55,17 @@ if __name__ == "__main__":
 
         mlflow.log_metric("mae", mae)
         mlflow.log_metric("rmse", rmse)
+    return model, mae, rmse
+
+    
+
+
+
+if __name__ == "__main__":
+    df_prices = pd.read_parquet("data/df_prices.parquet")
+    df_wind = pd.read_parquet("data/df_wind.parquet")
+    df_features = build_features(df_prices, df_wind)
+    df_train, df_test = split_features(df_features)
+    run_training_pipeline(df_train, df_test)
+
 

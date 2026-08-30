@@ -6,7 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from prefect import flow, task
 from ingest import fetch_prices, fetch_wind
 from features import build_features, split_features
-from train import train_model, evaluate_model
+from train import run_training_pipeline
 
 
 @task
@@ -29,8 +29,7 @@ def assemble_features():
 
 @task
 def train_test(df_train, df_test):
-    model = train_model(df_train)
-    mae, rmse = evaluate_model(model, df_test)
+    model, mae, rmse = run_training_pipeline(df_train, df_test)
 
 
 
